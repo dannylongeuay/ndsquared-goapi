@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goapi
+  labels:
+    app.kubernetes.io/name: goapi
+    app.kubernetes.io/instance: goapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: goapi
+      app.kubernetes.io/instance: goapi
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: goapi
+        app.kubernetes.io/instance: goapi
+    spec:
+      securityContext:
+        fsGroup: 2000
+      containers:
+        - name: goapi
+          securityContext:
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+          image: "dannylongeuay/ndsq-goapi:latest"
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: goapi
+          ports:
+            - name: http
+              containerPort: 5555
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          resources:
+            limits:
+              cpu: 1
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
