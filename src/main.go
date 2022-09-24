@@ -55,6 +55,18 @@ func connectfourRoute(c *gin.Context) {
 	c.JSON(http.StatusOK, r)
 }
 
+// Ping godoc
+// @Summary health check endpoint
+// @Description ping the api
+// @Tags health
+// @Accept json
+// @Produce json
+// @Success 200 {string} pong
+// @Router /ping [get]
+func ping(c *gin.Context) {
+	c.JSON(200, gin.H{"message": "pong"})
+}
+
 // @title        NDSquared GOAPI
 // @version      1.0
 // @description  Golang backend service for NDSquared
@@ -78,9 +90,7 @@ func main() {
 	})
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{"message": "pong"})
-	})
+	router.GET("/ping", ping)
 	router.POST("/connectfour", connectfourRoute)
 
 	err = router.Run("0.0.0.0:5555")
