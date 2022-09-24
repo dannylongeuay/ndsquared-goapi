@@ -1,0 +1,33 @@
+name: Code Quality Checks
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/goapi-ci.yaml"
+      - "src/**"
+      - "go.mod"
+jobs:
+  tests:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "^1.17.2"
+      - name: Run Tests
+        run: |
+          go mod download
+          go test -v ./...
+  lint:
+    name: Run Linter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "^1.17.2"
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: v1.44.2
+          args: --fast
