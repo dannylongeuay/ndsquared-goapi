@@ -68,7 +68,7 @@ func ping(c *gin.Context) {
 }
 
 // @title        NDSquared GOAPI
-// @version      1.0
+// @version      1.0.0
 // @description  Golang backend service for NDSquared
 // @BasePath     /
 
